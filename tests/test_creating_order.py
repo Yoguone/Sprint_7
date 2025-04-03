@@ -1,12 +1,13 @@
 import allure
 import pytest
 import requests
+from urls import Urls
 
 class TestOrders:
     @pytest.mark.parametrize("color", [["BLACK"], ["GREY"], ["BLACK", "GREY"], []])
     @allure.title("Заказ самоката в разных вариациях цвета")
     def test_choose_one_scooter_color(self, color):
-        url = "https://qa-scooter.praktikum-services.ru/api/v1/orders"
+        url = Urls.orders
         payload = {
         "firstName": "Naruto",
         "lastName": "Uchiha",
