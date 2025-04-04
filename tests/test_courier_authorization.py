@@ -2,6 +2,7 @@ import allure
 import requests
 from helpers import register_new_courier_and_return_login_password
 from urls import Urls
+from data import ResponseMessages
 
 class TestCourierAuthorization:
 
@@ -28,7 +29,7 @@ class TestCourierAuthorization:
         authorization_data = {"login": login}
         response = requests.post(courier_authorization_url, authorization_data)
         response_json = response.json()
-        assert response.status_code == 400 and response_json["message"] == "Недостаточно данных для входа"
+        assert response.status_code == 400 and response_json["message"] == ResponseMessages.courier_authorization_400
 
     @allure.title("Авторизация курьера с неправильным паролем")
     def test_courier_authorization_wrong_password_error(self):
@@ -39,7 +40,7 @@ class TestCourierAuthorization:
                    "password": "123456"}
         response = requests.post(courier_authorization_url, authorization_data)
         response_json = response.json()
-        assert response.status_code == 404 and response_json["message"] == "Учетная запись не найдена"
+        assert response.status_code == 404 and response_json["message"] == ResponseMessages.courier_authorization_404
 
     @allure.title("Авторизация несуществующим курьером")
     def test_courier_authorization_without_courier_data_in_data_base(self):
@@ -48,4 +49,4 @@ class TestCourierAuthorization:
                               "password": "123456"}
         response = requests.post(courier_authorization_url, authorization_data)
         response_json = response.json()
-        assert response.status_code == 404 and response_json["message"] == "Учетная запись не найдена"
+        assert response.status_code == 404 and response_json["message"] == ResponseMessages.courier_authorization_404

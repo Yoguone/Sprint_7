@@ -8,7 +8,7 @@ def delete_courier():
         delete_courier_url = Urls.delete_courier_url
         response = requests.delete(f'{delete_courier_url}/{courier_id}')
         return response
-    return _delete_courier
+    yield _delete_courier
 
 
 

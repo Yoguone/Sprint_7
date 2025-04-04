@@ -3,6 +3,7 @@ from random import randint
 import requests
 from helpers import register_new_courier_and_return_login_password
 from urls import Urls
+from data import ResponseMessages
 
 class TestCreatingCourier:
 
@@ -27,7 +28,7 @@ class TestCreatingCourier:
         second_courier_response = requests.post(url, data = second_courier)
         second_courier_response_json = second_courier_response.json()
         assert (second_courier_response.status_code == 409
-                and second_courier_response_json['message'] == "Этот логин уже используется")
+                and second_courier_response_json['message'] == ResponseMessages.creating_courier_409)
 
     @allure.title("Ошибка регистрации с незаполненным паролем")
     def test_register_new_courier_without_password_failed(self):
@@ -38,7 +39,7 @@ class TestCreatingCourier:
                    "firstName": first_name}
         response = requests.post(url, data = payload)
         response_json = response.json()
-        assert response.status_code == 400 and response_json['message'] == "Недостаточно данных для создания учетной записи"
+        assert response.status_code == 400 and response_json['message'] == ResponseMessages.creating_courier_400
 
     @allure.title("Возвращение ошибки при незаполненном пароле")
     def test_register_new_courier_without_password_return_400(self):
@@ -50,7 +51,7 @@ class TestCreatingCourier:
         response = requests.post(url, data=payload)
         status_code = 400
         response_json = response.json()
-        assert response.status_code == status_code and response_json['message'] == "Недостаточно данных для создания учетной записи"
+        assert response.status_code == status_code and response_json['message'] == ResponseMessages.creating_courier_400
 
     @allure.title("Тело ответа содержит 'ok: True'")
     def test_register_new_courier_return_201(self):
@@ -78,4 +79,4 @@ class TestCreatingCourier:
                    "password": password,
                    "firstName": first_name}
         second_courier_response = requests.post(url, second_courier)
-        assert second_courier_response.status_code == 409 and second_courier_response.json() == {"message": "Этот логин уже используется"}
+        assert second_courier_response.status_code == 409 and second_courier_response.json()["message"] == ResponseMessages.creating_courier_409
